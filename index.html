@@ -1,14 +1,136 @@
+
 <html>
-  <head>
-    <script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
-  </head>
-  <body>
-    <a-scene>
-      <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-      <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-      <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-      <a-plane position="0 0 -4" rotation="-90 0 0" width="4" height="4" color="#7BC8A4"></a-plane>
-      <a-sky color="#ECECEC"></a-sky>
-    </a-scene>
-  </body>
+<head>
+<script src="https://aframe.io/releases/1.8.0/aframe.min.js"></script>
+
+  <!-- おにぎりの形状を作る -->
+  <script>
+    AFRAME.registerComponent('onigiri', {
+      init: function () {
+
+        const geometry = new THREE.BufferGeometry();
+
+        // おにぎりの頂点
+        const vertices = new Float32Array([
+          -1, 0, 0.45,
+           1, 0, 0.45,
+           0, 1.7, 0.45,
+
+          -1, 0, -0.45,
+           1, 0, -0.45,
+           0, 1.7, -0.45
+        ]);
+
+        // 頂点をつないで面を作る
+        const indices = [
+          0, 1, 2,
+          3, 5, 4,
+
+          0, 3, 4,
+          0, 4, 1,
+
+          1, 4, 5,
+          1, 5, 2,
+
+          2, 5, 3,
+          2, 3, 0
+        ];
+
+        geometry.setAttribute(
+          'position',
+          new THREE.BufferAttribute(vertices, 3)
+        );
+
+        geometry.setIndex(indices);
+        geometry.computeVertexNormals();
+
+        // ご飯の色
+        const material = new THREE.MeshStandardMaterial({
+          color: '#F5EBD0',
+          side: THREE.DoubleSide
+        });
+
+        const mesh = new THREE.Mesh(geometry, material);
+
+        this.el.setObject3D('mesh', mesh);
+      }
+    });
+  </script>
+</head>
+
+<body>
+
+  <a-scene>
+
+    <!-- 立方体 -->
+    <a-box
+      position="-1 0.5 -3"
+      rotation="0 45 0"
+      color="#4CC3D9">
+    </a-box>
+
+    <!-- 球体 -->
+    <a-sphere
+      position="0 1.25 -5"
+      radius="1.25"
+      color="#EF2D5E">
+    </a-sphere>
+
+    <!-- 円柱 -->
+    <a-cylinder
+      position="1 0.75 -3"
+      radius="0.5"
+      height="1.5"
+      color="#FFC65D">
+    </a-cylinder>
+
+    <!-- 床 -->
+    <a-plane
+      position="0 0 -4"
+      rotation="-90 0 0"
+      width="4"
+      height="4"
+      color="#7BC8A4">
+    </a-plane>
+
+    <!-- おにぎり本体 -->
+    <a-entity
+      onigiri
+      position="2.3 0.1 -4">
+    </a-entity>
+
+    <!-- おにぎりの海苔 -->
+    <a-box
+      position="2.3 0.5 -3.53"
+      width="1.4"
+      height="0.5"
+      depth="0.03"
+      color="#153B20">
+    </a-box>
+
+    <!-- ご飯の粒 -->
+    <a-sphere
+      position="2.05 0.95 -3.52"
+      radius="0.035"
+      color="#FFFFFF">
+    </a-sphere>
+
+    <a-sphere
+      position="2.35 1.1 -3.52"
+      radius="0.035"
+      color="#FFFFFF">
+    </a-sphere>
+
+    <a-sphere
+      position="2.55 0.85 -3.52"
+      radius="0.035"
+      color="#FFFFFF">
+    </a-sphere>
+
+    <!-- 背景 -->
+    <a-sky color="#ECECEC"></a-sky>
+
+  </a-scene>
+
+</body>
 </html>
